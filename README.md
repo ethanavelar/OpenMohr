@@ -1,0 +1,2 @@
+# 2D-Mohr-Circle
+Given any set of stresses on an element, this program will be able to graph the Mohr Circle along with the associated principle stress and maximum shear stress elements. This program is intended for mechanical and civil engineers to easily create stress element diagrams from known stresses. This is the second iteration of this code to implement the Mohr Circle calculations in a more efficient way. Once finished with appropriate plots I will  begin making a user interface to interact with this program.
