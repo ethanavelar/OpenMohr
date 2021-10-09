@@ -143,10 +143,6 @@ def buildPrincipleStressElement():
     ax.plot([2, 7], [2, 2])
 
     #ax.arrow(0, -0.25, 4, 0, length_includes_head=True, head_width=0.2)
-    ax.arrow(x[0], y[0], x[1], 0)
-    ax.arrow(x[2], y[2], 0, y[3])
-    ax.arrow(x[4], y[4], x[5], 0 )
-    ax.arrow(x[6], y[6], 0, y[7])
     # Arrow to Point Arrangement for Shear Stress Arrows
     ArrowArr = [0, 2, 4, 6]
     print(ArrowArr)
