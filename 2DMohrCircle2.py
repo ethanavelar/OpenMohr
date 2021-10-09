@@ -33,7 +33,7 @@ def buildMohrCircle(sigmax, sigmay, txy, dire, sigma1, sigma2):
     x2 = sigmax
     y1 = 0
     y2 = txy*signConvention[0]
-    r = np.sqrt( (x2 - x1)**2 + (y2 - y1)**2 )
+    r = np.sqrt(((sigmax - sigmay)/2)**2 + txy**2 )
     
     # Constructing x and y arrays to carry Mohr Cricle Points of Interest
     """
@@ -46,7 +46,7 @@ def buildMohrCircle(sigmax, sigmay, txy, dire, sigma1, sigma2):
     """
     x = [sigmax, sigmay, R, sigma1, sigma2, sigmax,                sigmay,                sigmax,                sigmay,                R,  R]
     y = [0,      0,      0, 0,      0,      txy*signConvention[0], txy*signConvention[1], txy*signConvention[0], txy*signConvention[1], -r, +r]
-    labels = [r'$\sigma_x$', r'$\sigma_y$', 'C', r'$\sigma_1$', r'$\sigma_2$', r'( $\sigma_x, \tau_{xy}$ )', r'( $\sigma_y, \tau_{xy}$ )', 'X', 'Y', r'$\tau_{min}$', r'$\tau_{max}$']
+    labels = [r'$\sigma_x$', r'$\sigma_y$', 'C', r'$\sigma_1$', r'$\sigma_2$', r'( $\sigma_x, \tau_{xy}$ )', r'( $\sigma_y, \tau_{xy}$ )', 'X', 'Y', r'$\tau_{min}$', r'$\tau_{max}$', ]
 
     # Plotting Circle
     mohrCircle = pl.Circle(centerCoord, r, fill=False)
@@ -115,20 +115,70 @@ def buildMohrCircle(sigmax, sigmay, txy, dire, sigma1, sigma2):
     # Plotting Axis Lines
     ax.axhline(y=0, color='k')
     ax.axvline(x=0, color='k')
-    ax.set_aspect('auto')
+    ax.set_aspect('equal')
     pl.show()
+
+def buildPrincipleStressElement():
+    fig = pl.figure(tight_layout=True)
+    ax = fig.add_subplot(1,1,1)
+    # Determine Edge Points of Square/Element
+    #x = [-0.25, 4.25, 4.25, -0.25]
+    #y = [-0.25, -0.25, 4.25, 4.25]
+
+    x = [0.25, 3.75, 4.25, 4.25, 3.75, 0.25, -0.25, -0.25]
+    y = [-0.25, -0.25, 0.25, 3.75, 4.25, 4.25, 3.75, 0.25]
+
+    ax.scatter(x,y)
+    # Midpoints of the Square/Element
+    x1 = [-0.25, 2, 2, 4.25]
+    y1 = [2, -0.25, 4.25, 2]
+    ax.scatter(x1, y1)
+    # Midpoints that are off of
+    x2 = [-2, 2, 2, 6]
+    y2 = [2, -2, 6, 2]
+    ax.scatter(x2, y2)
+    
+    phip = -30
+    ax.add_patch(patches.Rectangle((0,0), 4,4)) #, angle=phip))    
+    ax.plot([2, 7], [2, 2])
+
+    #ax.arrow(0, -0.25, 4, 0, length_includes_head=True, head_width=0.2)
+    ax.arrow(x[0], y[0], x[1], 0)
+    ax.arrow(x[2], y[2], 0, y[3])
+    ax.arrow(x[4], y[4], x[5], 0 )
+    ax.arrow(x[6], y[6], 0, y[7])
+    # Arrow to Point Arrangement for Shear Stress Arrows
+    ArrowArr = [0, 2, 4, 6]
+    print(ArrowArr)
+    # List Handles are Intended to Provide Flexability with Arrows
+    # Looking to figure out how to flip the direction of two arrows
+    xlistHandle = x
+    ylistHandle = y
+    for i in ArrowArr:
+        dx = x[i+1] - x[i]
+        dy = y[i+1] - y[i]
+        ax.arrow(x[i], y[i], dx, dy, length_includes_head=False, head_width=0.2, shape='left', color='k', head_starts_at_zero=False)
+        print(x[i], y[i], dx, dy)
+    
+    for e in range(len(x1)-1):
+        dx = x2[e] - x1[e]
+        dy = y2[e] - y1[e]
+        ax.arrow(x1[e], y1[e], dx, dy, length_includes_head=True, head_width=0.2)
+
+    ax.set_aspect('equal')
+    pl.show()
+
+def buildMaxShearElement():
+    pass
 
 def main():
     sigmax = 20
-    sigmay = 10
+    sigmay = -10
     txy = 10
     direction = "cw"
 
     sigma1, sigma2 = stress(sigmax, sigmay, txy)
     buildMohrCircle(sigmax, sigmay, txy, direction, sigma1, sigma2)
-
-
-
+    buildPrincipleStressElement()
+    
 if __name__ == "__main__": main()
-
-
